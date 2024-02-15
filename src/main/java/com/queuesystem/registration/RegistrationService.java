@@ -1,8 +1,9 @@
 package com.queuesystem.registration;
 
-import com.queuesystem.appUser.AppUser;
-import com.queuesystem.appUser.AppUserRole;
-import com.queuesystem.appUser.AppUserService;
+import com.queuesystem.user.Administrator;
+import com.queuesystem.user.User;
+import com.queuesystem.user.UserRole;
+import com.queuesystem.user.UserService;
 import com.queuesystem.registration.token.ConfirmationToken;
 import com.queuesystem.registration.token.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 public class RegistrationService {
 
     private final EmailValidator emailValidator;
-    private final AppUserService appUserService;
+    private final UserService userService;
     private final ConfirmationTokenService confirmationTokenService;
     public String register(RegistrationRequest request) {
         boolean isValidEmail = emailValidator.test(request.getEmail());
@@ -25,13 +26,12 @@ public class RegistrationService {
             throw new IllegalStateException("Invalid Email!");
         }
 
-        String token = appUserService.signUpUser(
-                new AppUser(
+        String token = userService.signUpUser(
+                new Administrator(
                         request.getName(),
                         request.getUsername(),
                         request.getEmail(),
-                        request.getPassword(),
-                        AppUserRole.SERVICEMAN
+                        request.getPassword()
                 )
         );
 
@@ -58,8 +58,8 @@ public class RegistrationService {
         }
 
         confirmationTokenService.setConfirmedAt(token);
-        appUserService.enableAppUser(
-                confirmationToken.getAppUser().getEmail());
+        userService.enableAppUser(
+                confirmationToken.getUser().getEmail());
         return "confirmed";
     }
 }

@@ -1,4 +1,4 @@
-package com.queuesystem.appUser;
+package com.queuesystem.user;
 
 import com.queuesystem.registration.token.ConfirmationToken;
 import com.queuesystem.registration.token.ConfirmationTokenService;
@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class AppUserService implements UserDetailsService {
+public class UserService implements UserDetailsService {
 
     private final static String USER_NOT_FOUND_MSG = "User with email %s not found";
     private final UserRepository userRepository;
@@ -25,25 +25,25 @@ public class AppUserService implements UserDetailsService {
         return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
     }
 
-    public String signUpUser(AppUser appUser) {
-        boolean isUserExist = userRepository.findByEmail(appUser.getEmail()).isPresent();
+    public String signUpUser(User user) {
+        boolean isUserExist = userRepository.findByEmail(user.getEmail()).isPresent();
 
         if (isUserExist) {
             throw new IllegalStateException("Email already taken!");
         }
 
-        String encodedPassword = new BCryptPasswordEncoder().encode(appUser.getPassword());
+        String encodedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
 
-        appUser.setPassword(encodedPassword);
+        user.setPassword(encodedPassword);
 
-        userRepository.save(appUser);
+        userRepository.save(user);
 
         String token = UUID.randomUUID().toString();
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token,
                 LocalDateTime.now(),
                 LocalDateTime.now().plusMinutes(15),
-                appUser
+                user
         );
 
         confirmationTokenService.saveConfirmationToken(confirmationToken);

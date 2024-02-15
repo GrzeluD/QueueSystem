@@ -1,4 +1,4 @@
-package com.queuesystem.appUser;
+package com.queuesystem.user;
 
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
@@ -17,7 +17,8 @@ import java.util.Collections;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
-public class AppUser  implements UserDetails {
+@Table(name = "users")
+public class User implements UserDetails {
 
     @SequenceGenerator(
             name = "seq",
@@ -35,21 +36,20 @@ public class AppUser  implements UserDetails {
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)
-    private AppUserRole appUserRole;
+    private UserRole userRole;
     private Boolean locked = false;
     private Boolean enabled = false;
 
-    public AppUser(String name, String username, String email, String password, AppUserRole appUserRole) {
+    public User(String name, String username, String email, String password) {
         this.name = name;
         this.username = username;
         this.email = email;
         this.password = password;
-        this.appUserRole = appUserRole;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(appUserRole.name());
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userRole.name());
         return Collections.singletonList(authority);
     }
 
