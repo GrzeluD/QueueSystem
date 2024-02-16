@@ -1,8 +1,13 @@
 package com.queuesystem.messageParser;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
-public class TaskCompletedMsg implements Message {
+@Getter
+@Setter
+public class TaskReport {
     private int taskId;
     private LocalDateTime startTime;
     private LocalDateTime endTime;

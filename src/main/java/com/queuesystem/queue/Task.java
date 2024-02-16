@@ -9,6 +9,10 @@ public class Task {
         this.id = id;
         this.priority = priority;
     }
+    public Task(Order order) {
+        this.id = order.getRequestId();
+        this.priority = order.getPriority();
+    }
     public void changePriority(int priority) {
         this.priority = priority;
     }

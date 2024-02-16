@@ -4,6 +4,8 @@ import com.queuesystem.messageParser.MessageParser;
 import com.queuesystem.messageParser.SuperComputerResources;
 import com.queuesystem.popStrategy.PopStrategy;
 import com.queuesystem.popStrategy.PopStrategyFactory;
+import com.queuesystem.request.Order;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +14,10 @@ import java.util.List;
  * This class holds record keys in sort of queue, from which
  * they are delivered to SuperComputer's interface.
  */
+@Service
 public class OrdersQueue
 {
-    private List<Task> queue;
+    private final List<Task> queue;
     private MessageParser parser;
 
     public OrdersQueue()
@@ -22,9 +25,10 @@ public class OrdersQueue
         this.queue = new ArrayList<>();
     }
 
-    public void addTask(Task task)
+    public void addTask(Order order)
     {
-        addTask(task);
+        Task task = new Task(order);
+        queue.add(task);
     }
 
     public Task pop(SuperComputerResources resourcesInfo)
@@ -33,6 +37,7 @@ public class OrdersQueue
         PopStrategy strategy = factory.createStrategy();
         return strategy.pop(queue, resourcesInfo);
     }
+
 
     private PopStrategyFactory selectFactory(SuperComputerResources resourcesInfo) {
         // select factory based on resources available
