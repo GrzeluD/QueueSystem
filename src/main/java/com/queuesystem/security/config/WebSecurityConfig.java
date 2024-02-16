@@ -1,5 +1,6 @@
 package com.queuesystem.security.config;
 
+import com.queuesystem.security.handlers.CustomAuthenticationSuccessHandler;
 import com.queuesystem.user.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -29,7 +30,12 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/registration/**").permitAll()
                         .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())
-                .formLogin(Customizer.withDefaults());
+                .formLogin(form -> form
+                        .loginProcessingUrl("/perform_login")
+                        .defaultSuccessUrl("/", true)
+                        .failureUrl("/login.html?error=true")
+                        .successHandler(new CustomAuthenticationSuccessHandler())
+                        .permitAll());
 
         return http.build();
     }

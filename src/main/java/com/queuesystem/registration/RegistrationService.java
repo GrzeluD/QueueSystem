@@ -1,9 +1,6 @@
 package com.queuesystem.registration;
 
-import com.queuesystem.user.Administrator;
-import com.queuesystem.user.User;
-import com.queuesystem.user.UserRole;
-import com.queuesystem.user.UserService;
+import com.queuesystem.user.*;
 import com.queuesystem.registration.token.ConfirmationToken;
 import com.queuesystem.registration.token.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
@@ -27,7 +24,7 @@ public class RegistrationService {
         }
 
         String token = userService.signUpUser(
-                new Administrator(
+                new Customer(
                         request.getName(),
                         request.getUsername(),
                         request.getEmail(),
