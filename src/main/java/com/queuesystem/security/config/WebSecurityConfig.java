@@ -28,6 +28,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(HttpMethod.GET, "/api/v1/registration/confirm**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/registration/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/request/**").permitAll()
                         .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())
                 .formLogin(form -> form
@@ -35,7 +36,8 @@ public class WebSecurityConfig {
                         .defaultSuccessUrl("/", true)
                         .failureUrl("/login.html?error=true")
                         .successHandler(new CustomAuthenticationSuccessHandler())
-                        .permitAll());
+                        .permitAll())
+                .httpBasic(customizer -> customizer.realmName("Your API Realm"));
 
         return http.build();
     }

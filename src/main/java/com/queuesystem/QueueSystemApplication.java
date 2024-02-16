@@ -22,11 +22,11 @@ public class QueueSystemApplication {
 		//Simulation of new message from SuperComputer:
 		String taskCompletedJson = "{\"taskId\":\"123\",\"startTime\":\"2023-01-01T12:00:00\",\"endTime\":\"2023-01-01T12:30:00\",\"resultFolderPath\":\"/results/task123\",\"resultFolderRemovalDate\":\"2023-06-01T00:00:00\"}";
 		String freeResourcesReportJson = "{\"freeCPUs\":4,\"freeGPUs\":2,\"freeMemory\":8192}";
-//		try {
-//			messageParser.receiveMessage(JsonParser.parseFreeResourcesReportMsg(freeResourcesReportJson));
-//			messageParser.receiveMessage(JsonParser.parseTaskCompletedMsg(taskCompletedJson));
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
+		try {
+			messageParser.receiveMessage(JsonParser.parseFreeResourcesReportMsg(freeResourcesReportJson));
+			messageParser.receiveMessage(JsonParser.parseTaskCompletedMsg(taskCompletedJson));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
