@@ -25,7 +25,7 @@ public class Request {
             strategy = GenerationType.SEQUENCE,
             generator = "request_sequence_sequence"
     )
-    private Long requestId;
+    private int requestId;
 
     @Column(nullable = false)
     private String filePath;
