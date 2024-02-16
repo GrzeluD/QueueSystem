@@ -1,5 +1,8 @@
 package com.queuesystem.messageParser;
 
+import lombok.Getter;
+
+@Getter
 public class Resource {
     private int cpuCount;
     private int gpuCount;
@@ -8,20 +11,5 @@ public class Resource {
         this.cpuCount = couCount;
         this.gpuCount = gpuCount;
         this.ramMegabytes = ramMegabytes;
-    }
-    public int getCpuCount() {
-        return cpuCount;
-    }
-    public int getGpuCount() {
-        return gpuCount;
-    }
-    public int getRamMegabytes() {
-        return ramMegabytes;
-    }
-    public String toJson(String name) {
-        return name + "Resource{"+
-                "\"cpuCount\" : \"" + cpuCount +
-                ", \"gpuCount\" : \"" + gpuCount +
-                ", \"ramMegabytes\" :\"" + ramMegabytes + "\"}";
     }
 }

@@ -4,6 +4,7 @@ import com.queuesystem.messageParser.MessageParser;
 import com.queuesystem.messageParser.SuperComputerResources;
 import com.queuesystem.popStrategy.PopStrategy;
 import com.queuesystem.popStrategy.PopStrategyFactory;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +13,10 @@ import java.util.List;
  * This class holds record keys in sort of queue, from which
  * they are delivered to SuperComputer's interface.
  */
+@Service
 public class OrdersQueue
 {
-    private List<Task> queue;
+    private final List<Task> queue;
     private MessageParser parser;
 
     public OrdersQueue()
