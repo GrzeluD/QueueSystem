@@ -1,5 +1,7 @@
 package com.queuesystem.queue;
 
+import com.queuesystem.request.Order;
+
 public class Task {
     private final int id;
     private int priority;
@@ -15,5 +17,13 @@ public class Task {
     }
     public int getId() {
         return id;
+    }
+
+    /**
+     * this method gets complete order info from database based on TaskID
+     * @return
+     */
+    public Order getOrderFromDB(/*DBConnection dbConnection OR DBAdapter bdAdapter*/) {
+        return null;
     }
 }
