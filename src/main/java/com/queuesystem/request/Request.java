@@ -25,7 +25,9 @@ public class Request {
             strategy = GenerationType.SEQUENCE,
             generator = "request_sequence_sequence"
     )
-    private int requestId;
+
+    private Integer requestId;
+
 
     @Column(nullable = false)
     private String filePath;
@@ -36,20 +38,19 @@ public class Request {
     @Column(nullable = false)
     private LocalDateTime requestedAt;
 
-    @ManyToOne
-    @JoinColumn(
-            nullable = false,
-            name = "user_id"
-    )
-    private User user;
+    @Column(nullable = false)
+    private Integer userId;
 
+    private Integer priority;
     public Request(String filePath,
                  String requestStatus,
                  LocalDateTime requestedAt,
-                 User user) {
+                 Integer userId,
+                 Integer priority) {
         this.filePath = filePath;
         this.requestStatus = requestStatus;
         this.requestedAt = requestedAt;
-        this.user = user;
+        this.userId = userId;
+        this.priority = priority;
     }
 }

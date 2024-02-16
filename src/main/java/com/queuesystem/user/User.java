@@ -30,7 +30,7 @@ public class User implements UserDetails {
             strategy = GenerationType.SEQUENCE,
             generator = "seq"
     )
-    private Long id;
+    private Integer id;
     private String name;
     private String username;
     private String email;

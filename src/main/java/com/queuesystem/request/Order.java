@@ -25,12 +25,13 @@ public class Order extends Request {
     public Order(String filePath,
                  String requestStatus,
                  LocalDateTime requestedAt,
-                 User user,
+                 Integer userId,
+                 Integer priority,
                  LocalDateTime approvedAt,
                  LocalDateTime executionStartedAt,
                  LocalDateTime executionEndedAt,
                  String logPath) {
-        super(filePath, requestStatus, requestedAt, user);
+        super(filePath, requestStatus, requestedAt, userId, priority);
         this.approvedAt = approvedAt;
         this.executionStartedAt = executionStartedAt;
         this.executionEndedAt = executionEndedAt;
