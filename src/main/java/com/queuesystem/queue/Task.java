@@ -25,7 +25,7 @@ public class Task {
 
     /**
      * this method gets complete order info from database based on TaskID
-     * @return
+     * @return Order matching ID in task
      */
     public Order getOrderFromDB(/*DBConnection dbConnection OR DBAdapter bdAdapter*/) {
         return null;

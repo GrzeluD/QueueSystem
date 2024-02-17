@@ -23,14 +23,15 @@ public class OrdersQueue
 {
 
     private final List<Task> queue;
-    private MessageParser parser;
+    private final MessageParser parser;
 
-    public OrdersQueue()
+    public OrdersQueue(MessageParser parser)
     {
         this.queue = new ArrayList<>();
+        this.parser = parser;
     }
 
-    public void addTask(Order order)
+    public void addToQueue(Order order)
     {
         Task task = new Task(order);
         queue.add(task);
@@ -44,19 +45,21 @@ public class OrdersQueue
             PopStrategyFactory factory = selectFactory(resourcesInfo);
             PopStrategy strategy = factory.createStrategy();
             task = strategy.pop(queue, freeResources);
-            if (task != null) parser.requestTaskExecution(task);
-            freeResources = resourcesInfo.getFreeResources();
-            freeResources.reduceBy(DBAdapter.getRequiredResources(task));
-            resourcesInfo.setFreeResources(freeResources);
+            if (task != null) {
+                parser.requestTaskExecution(task);
+                freeResources = resourcesInfo.getFreeResources();
+                freeResources.reduceBy(DBAdapter.getRequiredResources(task));
+                resourcesInfo.setFreeResources(freeResources);
+            }
         } while (task != null);
     }
 
 
     private PopStrategyFactory selectFactory(SuperComputerResources resourcesInfo) {
-        Integer cpuFreePercent =  resourcesInfo.getFreeResources().getCpuCount() / resourcesInfo.getTotalResources().getCpuCount();
-        Integer gpuFreePercent =  resourcesInfo.getFreeResources().getGpuCount() / resourcesInfo.getTotalResources().getGpuCount();
-        Integer ramFreePercent =  resourcesInfo.getFreeResources().getRamMegabytes() / resourcesInfo.getTotalResources().getRamMegabytes();
-        Integer freePercentage =  resourcesInfo.getFreeResources().getResourceWeight() / resourcesInfo.getTotalResources().getResourceWeight();
+        int cpuFreePercent = resourcesInfo.getFreeResources().getCpuCount() / resourcesInfo.getTotalResources().getCpuCount();
+        int gpuFreePercent = resourcesInfo.getFreeResources().getGpuCount() / resourcesInfo.getTotalResources().getGpuCount();
+        int ramFreePercent = resourcesInfo.getFreeResources().getRamMegabytes() / resourcesInfo.getTotalResources().getRamMegabytes();
+        int freePercentage = resourcesInfo.getFreeResources().getResourceWeight() / resourcesInfo.getTotalResources().getResourceWeight();
         if (freePercentage < 0.1 ||
                 cpuFreePercent < 0.01 ||
                 gpuFreePercent < 0.01 ||

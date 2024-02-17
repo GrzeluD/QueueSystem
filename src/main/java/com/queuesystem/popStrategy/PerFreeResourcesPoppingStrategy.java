@@ -1,5 +1,6 @@
 package com.queuesystem.popStrategy;
 
+import com.queuesystem.dbAdapter.DBAdapter;
 import com.queuesystem.messageParser.Resource;
 import com.queuesystem.queue.Task;
 import java.util.List;
@@ -9,8 +10,19 @@ public class PerFreeResourcesPoppingStrategy implements PopStrategy {
     {
 
     }
-    public Task pop(List<Task> queue, Resource resources)
+
+    public Task pop(List<Task> queue, Resource freeResources)
     {
-        return null;
+        Task proposedTask = null;
+        Resource proposedTaskResources = new Resource(0, 0, 0);
+        for (Task task : queue) {
+            Resource taskResources = DBAdapter.getRequiredResources(task);
+            if (taskResources.fitIn(freeResources) && !taskResources.fitIn(proposedTaskResources)) {
+                proposedTask = task;
+            }
+        }
+        return queue.remove(queue.indexOf(proposedTask));
     }
+
+
 }

@@ -12,7 +12,7 @@ public class PerPriorityPoppingStrategy implements PopStrategy {
 
     }
     public Task pop(List<Task> queue, Resource freeResources) {
-        List<Task> prioQueue = null;
+        List<Task> prioQueue;
         int priority = 1;
         while(priority < 5) {
             prioQueue = filterTasksByPriority(queue, priority);
@@ -22,6 +22,7 @@ public class PerPriorityPoppingStrategy implements PopStrategy {
                     return queue.remove(queue.indexOf(task));
                 }
             }
+            ++priority;
         }
         return null;
     }
@@ -32,16 +33,5 @@ public class PerPriorityPoppingStrategy implements PopStrategy {
             if (task.getPriority() == priority) prioQueue.add(task);
         }
         return prioQueue;
-    }
-    private int getHighestPriorityPresentInQueueStartingFrom(List<Task> queue, int startFrom) {
-        for (int prio = startFrom; prio <= 4; ++prio) {
-            for (Task task : queue) {
-                if (task.getPriority() == 1) return prio;
-            }
-        }
-        return 5; //there's no such prio, so it's fine.
-    }
-    private void removeTaskById(List<Task> queue, int id) {
-        queue.removeIf(task->task.getId() == id);
     }
 }
