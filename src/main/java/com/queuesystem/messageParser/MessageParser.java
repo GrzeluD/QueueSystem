@@ -3,7 +3,6 @@ package com.queuesystem.messageParser;
 import com.queuesystem.dbAdapter.DBAdapter;
 import com.queuesystem.queue.OrdersQueue;
 import com.queuesystem.queue.Task;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,18 +19,16 @@ public class MessageParser {
     private int supercomputerPort;
     private final PendingReportsQueue pendingReportsQueue;
     private final OrdersQueue ordersQueue;
-    private final DBAdapter dbAdapter; // Zakładając, że DBAdapter jest komponentem Springowym
 
-    public MessageParser(OrdersQueue ordersQueue, DBAdapter dbAdapter) {
-        this.ordersQueue = ordersQueue;
-        this.dbAdapter = dbAdapter;
-        this.pendingReportsQueue = new PendingReportsQueue(dbAdapter);
+    public MessageParser() {
+        this.ordersQueue = new OrdersQueue(this);
+        this.pendingReportsQueue = new PendingReportsQueue();
     }
 
     @PostMapping("/free-resources")
     public ResponseEntity<?> processFreeResourcesInfo(@RequestBody FreeResourcesInfo info) {
         Resource freeResources = new Resource(info.getCpuCount(), info.getGpuCount(), info.getRamMegabytes()); // Przetwarzanie informacji o wolnych zasobach otrzymanych od superkomputera
-        Resource totalResources = dbAdapter.getTotalResources(); // Pobranie informacji o całkowitych zasobach z bazy danych
+        Resource totalResources = DBAdapter.getTotalResources(); // Pobranie informacji o całkowitych zasobach z bazy danych
         SuperComputerResources superComputerResources = new SuperComputerResources(); // Tworzenie obiektu SuperComputerResources z wolnymi i całkowitymi zasobami
         superComputerResources.setFreeResources(freeResources);
         superComputerResources.setTotalResources(totalResources);
@@ -41,7 +38,7 @@ public class MessageParser {
 
     @PostMapping("/task-report")
     public ResponseEntity<?> processTaskReport(@RequestBody TaskReport report) {
-        if (!dbAdapter.updateFinishedOrder(report)) {
+        if (!DBAdapter.updateFinishedOrder(report)) {
             // Jeśli zapis do bazy się nie udał, dodaj raport do kolejki oczekujących
             pendingReportsQueue.addReport(report);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Nie udało się zapisać raportu, został dodany do kolejki oczekujących.");
