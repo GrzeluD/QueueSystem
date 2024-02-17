@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 public class Order extends Request {
-    private int requestId;
     private LocalDateTime approvedAt;
     private LocalDateTime executionStartedAt;
     private LocalDateTime executionEndedAt;

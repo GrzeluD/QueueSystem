@@ -1,19 +1,31 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Administrator Console</title>
+    <title>Requests</title>
+    <!-- Dołącz Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
-<body>
-<header>
-    <h1>Panel Administratora</h1>
-</header>
-<main>
-    <p>Witaj w panelu Administratora!</p>
-    <form action="/logout" method="post">
-        <button type="submit">Wyloguj</button>
-    </form>
-
-</main>
+<body class="container mt-5">
+<h2>Requests</h2>
+<table class="table">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">File Path</th>
+        <th scope="col">Status</th>
+        <th scope="col">Requested At</th>
+        <th scope="col">User ID</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="request : ${requests}">
+        <td th:text="${request.requestId}"></td>
+        <td th:text="${request.filePath}"></td>
+        <td th:text="${request.requestStatus}"></td>
+        <td th:text="${#temporals.format(request.requestedAt, 'dd-MM-yyyy HH:mm')}"></td>
+        <td th:text="${request.userId}"></td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>
