@@ -1,8 +1,7 @@
 package com.queuesystem.popStrategy;
 
-import com.queuesystem.messageParser.SuperComputerResources;
+import com.queuesystem.messageParser.Resource;
 import com.queuesystem.queue.Task;
-
 import java.util.List;
 
 public class PerFreeResourcesPoppingStrategy implements PopStrategy {
@@ -10,7 +9,7 @@ public class PerFreeResourcesPoppingStrategy implements PopStrategy {
     {
 
     }
-    public Task pop(List<Task> queue, SuperComputerResources resources)
+    public Task pop(List<Task> queue, Resource resources)
     {
         return null;
     }

@@ -2,7 +2,10 @@ package com.queuesystem.messageParser;
 
 import com.queuesystem.dbAdapter.DBAdapter;
 import com.queuesystem.queue.OrdersQueue;
+import com.queuesystem.queue.Task;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +16,8 @@ import org.springframework.http.HttpStatus;
 @RestController
 @RequestMapping("/api/messages")
 public class MessageParser {
+    private String supercomputerAddress;
+    private int supercomputerPort;
     private final PendingReportsQueue pendingReportsQueue;
     private final OrdersQueue ordersQueue;
     private final DBAdapter dbAdapter; // Zakładając, że DBAdapter jest komponentem Springowym
@@ -44,7 +49,15 @@ public class MessageParser {
             // Jeśli się udało, spróbuj przetworzyć również raporty oczekujące
             pendingReportsQueue.processPendingReports();
         }
+        requestFreeResourcesReport();
         return ResponseEntity.ok().build();
     }
 
+    @Async
+    public void requestTaskExecution(Task task) {
+
+    }
+    public void requestFreeResourcesReport() {
+
+    }
 }
