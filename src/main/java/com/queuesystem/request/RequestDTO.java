@@ -16,4 +16,7 @@ public class RequestDTO {
     private final String requestStatus;
     private final LocalDateTime requestedAt;
     private final Integer userId;
+    private final Integer cpu;
+    private final Integer gpu;
+    private final Integer ram;
 }

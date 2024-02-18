@@ -1,10 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <title>My Requests</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
-<body>
-$END$
+<body class="container mt-5">
+<h2>My Requests</h2>
+<table class="table">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">File Path</th>
+        <th scope="col">Status</th>
+        <th scope="col">Requested At</th>
+        <th scope="col">CPU</th>
+        <th scope="col">GPU</th>
+        <th scope="col">RAM</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="request : ${requests}">
+        <td th:text="${request.requestId}"></td>
+        <td th:text="${request.filePath}"></td>
+        <td th:text="${request.requestStatus}"></td>
+        <td th:text="${#temporals.format(request.requestedAt, 'dd-MM-yyyy HH:mm')}"></td>
+        <td th:text="${request.cpu}"></td>
+        <td th:text="${request.gpu}"></td>
+        <td th:text="${request.ram}"></td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>
