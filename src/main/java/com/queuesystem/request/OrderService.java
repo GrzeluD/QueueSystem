@@ -31,6 +31,13 @@ public class OrderService {
     public Order convertRequestToOrder(Order order) {
         Request request = requestRepository.findById(order.getRequestId()).orElseThrow(() -> new RuntimeException("Nie znaleziono Requestu o id: " + order.getRequestId()));
 
+        if (order.getRequestStatus() == "Rejected") {
+            request.setRequestStatus(order.getRequestStatus());
+
+            requestRepository.save(request);
+            return order;
+        }
+
         request.setFilePath(order.getFilePath());
         request.setRequestStatus(order.getRequestStatus());
         request.setPriority(order.getPriority());

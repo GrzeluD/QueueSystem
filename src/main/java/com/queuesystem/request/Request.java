@@ -1,5 +1,6 @@
 package com.queuesystem.request;
 
+import com.queuesystem.user.Customer;
 import com.queuesystem.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -36,6 +37,11 @@ public class Request {
     private Integer cpu;
     private Integer gpu;
     private Integer ram;
+
+//    @ManyToOne
+//    @JoinColumn(name = "user_id")
+//    private Customer customer;
+
     public Request(String filePath,
                    String requestStatus,
                    LocalDateTime requestedAt,

@@ -7,7 +7,7 @@
 </head>
 <body class="container mt-4">
     <h1>Nowy Request</h1>
-    <form th:action="@{/api/request}" th:object="${request}" method="post" class="mt-3">
+    <form th:action="@{/api/request/create}" th:object="${request}" method="post" class="mt-3">
         <div class="form-group">
             <label for="filePath">Ścieżka do pliku:</label>
             <input type="text" id="filePath" th:field="*{filePath}" class="form-control" required />
