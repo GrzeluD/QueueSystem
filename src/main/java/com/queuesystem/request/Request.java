@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @Table(name = "requests")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Request {
 
     @SequenceGenerator(
@@ -27,30 +28,29 @@ public class Request {
     )
 
     private Integer requestId;
-
-
-    @Column(nullable = false)
     private String filePath;
-
-    @Column(nullable = false)
     private String requestStatus;
-
-    @Column(nullable = false)
     private LocalDateTime requestedAt;
-
-    @Column(nullable = false)
     private Integer userId;
-
     private Integer priority;
+    private Integer cpu;
+    private Integer gpu;
+    private Integer ram;
     public Request(String filePath,
-                 String requestStatus,
-                 LocalDateTime requestedAt,
-                 Integer userId,
-                 Integer priority) {
+                   String requestStatus,
+                   LocalDateTime requestedAt,
+                   Integer userId,
+                   Integer priority,
+                   Integer cpu,
+                   Integer gpu,
+                   Integer ram) {
         this.filePath = filePath;
         this.requestStatus = requestStatus;
         this.requestedAt = requestedAt;
         this.userId = userId;
         this.priority = priority;
+        this.cpu = cpu;
+        this.gpu = gpu;
+        this.ram = ram;
     }
 }

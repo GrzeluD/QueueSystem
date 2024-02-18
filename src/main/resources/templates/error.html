@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Error</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body class="container mt-5">
+<h2>Error</h2>
+<div class="alert alert-danger" role="alert">
+    <p>An error has occurred:</p>
+    <p th:text="${message}">Error message goes here.</p>
+</div>
+</body>
+</html>
