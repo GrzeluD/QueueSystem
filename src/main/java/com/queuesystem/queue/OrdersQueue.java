@@ -3,12 +3,12 @@ package com.queuesystem.queue;
 import com.queuesystem.dbAdapter.DBAdapter;
 import com.queuesystem.messageParser.MessageParser;
 import com.queuesystem.messageParser.SuperComputerResources;
-import com.queuesystem.messageParser.Resource;
 import com.queuesystem.popStrategy.PerPriorityPopFactory;
 import com.queuesystem.popStrategy.PerResourcesPopFactory;
 import com.queuesystem.popStrategy.PopStrategy;
 import com.queuesystem.popStrategy.PopStrategyFactory;
 import com.queuesystem.request.Order;
+import com.queuesystem.resources.Resources;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public class OrdersQueue
     public void pop(SuperComputerResources resourcesInfo)
     {
         Task task;
-        Resource freeResources = resourcesInfo.getFreeResources();
+        Resources freeResources = resourcesInfo.getFreeResources();
         do {
             PopStrategyFactory factory = selectFactory(resourcesInfo);
             PopStrategy strategy = factory.createStrategy();

@@ -1,11 +1,12 @@
 package com.queuesystem.messageParser;
 
+import com.queuesystem.resources.Resources;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class SuperComputerResources {
-    private Resource freeResources;
-    private Resource totalResources;
+    private Resources freeResources;
+    private Resources totalResources;
 }

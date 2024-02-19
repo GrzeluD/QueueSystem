@@ -24,6 +24,7 @@ public class Order extends Request {
     public Order(String filePath,
                  String requestStatus,
                  LocalDateTime requestedAt,
+                 LocalDateTime rejectedAt,
                  Integer userId,
                  Integer priority,
                  Integer cpu,
@@ -34,7 +35,7 @@ public class Order extends Request {
                  LocalDateTime executionEndedAt,
                  String logPath) {
 
-        super(filePath, requestStatus, requestedAt, userId, priority, cpu, gpu, ram);
+        super(filePath, requestStatus, requestedAt, rejectedAt, userId, priority, cpu, gpu, ram);
         this.approvedAt = approvedAt;
         this.executionStartedAt = executionStartedAt;
         this.executionEndedAt = executionEndedAt;

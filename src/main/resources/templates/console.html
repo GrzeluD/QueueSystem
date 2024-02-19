@@ -4,7 +4,7 @@
     <title>Requests</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
-<body class="container mt-5">
+<body style="max-width: 1600px" class="container mt-5">
 <h2>Requests</h2>
 <table class="table">
     <thead class="thead-dark">
@@ -14,6 +14,7 @@
         <th scope="col">Status</th>
         <th scope="col">Priority</th>
         <th scope="col">Requested At</th>
+        <th scope="col">Rejected At</th>
         <th scope="col">User ID</th>
         <th scope="col">CPU</th>
         <th scope="col">GPU</th>
@@ -28,35 +29,35 @@
         <td th:text="${request.requestStatus}"></td>
         <td th:text="${request.priority}"></td>
         <td th:text="${#temporals.format(request.requestedAt, 'dd-MM-yyyy HH:mm')}"></td>
+        <td th:text="${#temporals.format(request.rejectedAt, 'dd-MM-yyyy HH:mm')}"></td>
         <td th:text="${request.userId}"></td>
         <td th:text="${request.cpu}"></td>
         <td th:text="${request.gpu}"></td>
         <td th:text="${request.ram}"></td>
         <td>
-            <button type="button" class="btn btn-primary" data-toggle="modal" th:data-target="'#modal'+${request.requestId}">Edit</button>
+            <form th:if="${request.requestStatus != 'Rejected'}" style="margin-bottom: 4px" th:action="@{/api/request/reject/{requestId}(requestId=${request.requestId})}" method="post">
+                <button class="btn btn-secondary" type="submit">Reject</button>
+            </form>
+            <button type="button" class="btn btn-primary" data-toggle="modal" th:data-target="'#modal'+${request.requestId}">Approve</button>
 
             <div class="modal fade" th:id="'modal'+${request.requestId}" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Edit Request</h5>
+                            <h5 class="modal-title">Approve Request</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form th:action="@{/api/order/convertToOrder}" th:object="${order}" method="post">
+                        <form th:action="@{/api/request/approve}" th:object="${request}" method="post">
                             <div class="modal-body">
                                 <input type="hidden" name="requestId" th:value="${request.requestId}" />
+                                <input type="hidden" name="requestedAt" th:value="${request.requestedAt}" />
+                                <input type="hidden" name="userId" th:value="${request.userId}" />
+
                                 <div class="form-group">
                                     <label for="filePath">File Path:</label>
                                     <input name="filePath" type="text" class="form-control" th:value="${request.filePath}" required />
-                                </div>
-                                <div class="form-group">
-                                    <label for="status">Status:</label>
-                                    <select class="form-control" th:field="*{requestStatus}" required>
-                                        <option value="Approved">Approved</option>
-                                        <option value="Rejected">Rejected</option>
-                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="priority">Priority:</label>
@@ -97,11 +98,11 @@
         <th scope="col">Status</th>
         <th scope="col">Priority</th>
         <th scope="col">Requested At</th>
+        <th scope="col">ApprovedAt</th>
         <th scope="col">User ID</th>
         <th scope="col">CPU</th>
         <th scope="col">GPU</th>
         <th scope="col">RAM</th>
-        <th scope="col">Akcje</th>
     </tr>
     </thead>
     <tbody>
@@ -111,62 +112,11 @@
         <td th:text="${order.requestStatus}"></td>
         <td th:text="${order.priority}"></td>
         <td th:text="${#temporals.format(order.requestedAt, 'dd-MM-yyyy HH:mm')}"></td>
+        <td th:text="${#temporals.format(order.approvedAt, 'dd-MM-yyyy HH:mm')}"></td>
         <td th:text="${order.userId}"></td>
         <td th:text="${order.cpu}"></td>
         <td th:text="${order.gpu}"></td>
         <td th:text="${order.ram}"></td>
-        <td>
-            <button type="button" class="btn btn-primary" data-toggle="modal" th:data-target="'#modal'+${order.requestId}">Edit</button>
-
-            <div class="modal fade" th:id="'modal'+${order.requestId}" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Edit Request</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <form th:action="@{/api/order/update/{orderId}(orderId=${order.requestId})}" method="post">
-                            <div class="modal-body">
-                                <input type="hidden" name="requestId" th:value="${order.requestId}" />
-                                <div class="form-group">
-                                    <label for="filePath">File Path:</label>
-                                    <input name="filePath" type="text" class="form-control" th:value="${order.filePath}" required />
-                                </div>
-                                <div class="form-group">
-                                    <label for="status">Status:</label>
-                                    <select class="form-control" th:field="*{order.requestStatus}" required>
-                                        <option value="Approved">Approved</option>
-                                        <option value="Rejected">Rejected</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="priority">Priority:</label>
-                                    <input type="number" class="form-control" name="priority" th:value="${order.priority}" required />
-                                </div>
-                                <div class="form-group">
-                                    <label for="cpu">CPU:</label>
-                                    <input type="number" class="form-control" name="cpu" th:value="${order.cpu}" required />
-                                </div>
-                                <div class="form-group">
-                                    <label for="gpu">GPU:</label>
-                                    <input type="number" class="form-control" name="gpu" th:value="${order.gpu}" required />
-                                </div>
-                                <div class="form-group">
-                                    <label for="ram">RAM:</label>
-                                    <input type="number" class="form-control" name="ram" th:value="${order.ram}" required />
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary">Save changes</button>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </td>
     </tr>
     </tbody>
 </table>

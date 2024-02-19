@@ -1,9 +1,9 @@
 package com.queuesystem.controller;
 
+import com.queuesystem.dbAdapter.DBAdapter;
 import com.queuesystem.request.Order;
 import com.queuesystem.request.Request;
-import com.queuesystem.request.RequestService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.queuesystem.resources.Resources;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,17 +14,17 @@ import static com.queuesystem.security.SecurityUtils.getCurrentUserId;
 
 @Controller
 public class FrontController {
-    private RequestService requestService;
+    private final DBAdapter dbAdapter;
 
-    @Autowired
-    public FrontController(RequestService requestService) {
-        this.requestService = requestService;
+    public FrontController(DBAdapter dbAdapter) {
+        this.dbAdapter = dbAdapter;
     }
+
     @GetMapping("/console")
     public String console(Model model) {
         Order order = new Order();
-        List<Request> requests = requestService.findOnlyRequests();
-        List<Order> orders = requestService.findAllOrders();
+        List<Request> requests = dbAdapter.findOnlyRequests();
+        List<Order> orders = dbAdapter.findAllOrders();
         model.addAttribute("orders", orders);
         model.addAttribute("order", order);
         model.addAttribute("requests", requests);
@@ -38,7 +38,10 @@ public class FrontController {
     }
 
     @GetMapping("/service")
-    public String service() {
+    public String service(Model model) {
+        Resources updatedResources = dbAdapter.findResourceById();
+        model.addAttribute("updatedResources", updatedResources);
+
         return "service";
     }
 
@@ -49,7 +52,7 @@ public class FrontController {
 
     @GetMapping("/customer-list")
     public String customerList(Model model) {
-        List<Request> requests = requestService.findRequestsByUserId(getCurrentUserId());
+        List<Request> requests = dbAdapter.findRequestsByUserId(getCurrentUserId());
         model.addAttribute("requests", requests);
         return "customer-list";
     }

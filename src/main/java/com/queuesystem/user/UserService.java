@@ -48,8 +48,6 @@ public class UserService implements UserDetailsService {
 
         confirmationTokenService.saveConfirmationToken(confirmationToken);
 
-        //TODO send email
-
         return token;
     }
 
