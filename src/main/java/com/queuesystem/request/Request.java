@@ -1,7 +1,5 @@
 package com.queuesystem.request;
 
-import com.queuesystem.user.Customer;
-import com.queuesystem.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +17,7 @@ public class Request {
 
     @SequenceGenerator(
             name = "request_sequence",
-            sequenceName = "request_sequence_sequence",
+            sequenceName = "request_sequence",
             allocationSize = 1
     )
     @Id
@@ -32,19 +30,17 @@ public class Request {
     private String filePath;
     private String requestStatus;
     private LocalDateTime requestedAt;
+    private LocalDateTime rejectedAt;
     private Integer userId;
     private Integer priority;
     private Integer cpu;
     private Integer gpu;
     private Integer ram;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private Customer customer;
-
     public Request(String filePath,
                    String requestStatus,
                    LocalDateTime requestedAt,
+                   LocalDateTime rejectedAt,
                    Integer userId,
                    Integer priority,
                    Integer cpu,
@@ -53,6 +49,7 @@ public class Request {
         this.filePath = filePath;
         this.requestStatus = requestStatus;
         this.requestedAt = requestedAt;
+        this.rejectedAt = rejectedAt;
         this.userId = userId;
         this.priority = priority;
         this.cpu = cpu;

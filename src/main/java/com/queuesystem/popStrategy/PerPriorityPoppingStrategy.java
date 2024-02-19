@@ -1,8 +1,8 @@
 package com.queuesystem.popStrategy;
 
 import com.queuesystem.dbAdapter.DBAdapter;
-import com.queuesystem.messageParser.Resource;
 import com.queuesystem.queue.Task;
+import com.queuesystem.resources.Resources;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ public class PerPriorityPoppingStrategy implements PopStrategy {
     public PerPriorityPoppingStrategy() {
 
     }
-    public Task pop(List<Task> queue, Resource freeResources) {
+    public Task pop(List<Task> queue, Resources freeResources) {
         List<Task> prioQueue;
         int priority = 1;
         while(priority < 5) {

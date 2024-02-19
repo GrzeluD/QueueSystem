@@ -1,29 +1,70 @@
 package com.queuesystem.user;
 
+import com.queuesystem.dbAdapter.DBAdapter;
 import com.queuesystem.queue.OrdersQueue;
 import com.queuesystem.request.Order;
 import com.queuesystem.request.Request;
-import jakarta.persistence.Entity;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.stereotype.Service;
+import org.aspectj.weaver.ast.Or;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@RequestMapping("/api/request")
 @Getter
-@Entity
 @Setter
-@NoArgsConstructor
-public class Administrator extends User {
+@AllArgsConstructor
+@Controller
+public class Administrator {
 
-    @Getter
     private static List<Request> allRequests = new ArrayList<>();
+    private final AdministratorEntity administratorEntity;
+    private final DBAdapter dbAdapter;
+    private final OrdersQueue ordersQueue;
 
-    public Administrator(String name, String username, String email, String password) {
-        super(name, username, email, password);
-        setUserRole(UserRole.ADMINISTRATOR);
+    @RequestMapping("/reject/{requestId}")
+    public String rejectRequest(@PathVariable("requestId") Integer requestId ) {
+        Request request = dbAdapter.findRequestById(requestId);
+
+        request.setRequestStatus("Rejected");
+        request.setRejectedAt(LocalDateTime.now());
+
+        dbAdapter.saveRequest(request);
+        return "redirect:/console";
+    }
+
+    @RequestMapping("/approve")
+    public String approveRequest(@ModelAttribute Request request, RedirectAttributes redirectAttributes) {
+        Order order = new Order(request.getFilePath(),
+                "Approved",
+                request.getRequestedAt(),
+                request.getRejectedAt(),
+                request.getUserId(),
+                request.getPriority(),
+                request.getCpu(),
+                request.getGpu(),
+                request.getRam(),
+                LocalDateTime.now(), null, null, null);
+
+
+        try {
+            redirectAttributes.addFlashAttribute("successMessage", "Request zaakceptowany");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Coś poszło nie tak: " + e.getMessage());
+        }
+
+        dbAdapter.saveOrder(order);
+
+        ordersQueue.addToQueue(order);
+        return "redirect:/console";
     }
 
     public static void addRequest(Request request) {

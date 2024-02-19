@@ -29,6 +29,7 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/registration/confirm**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/registration/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/request/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/resources/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/order/**").permitAll()
                         .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())

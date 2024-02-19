@@ -3,6 +3,7 @@ package com.queuesystem.messageParser;
 import com.queuesystem.dbAdapter.DBAdapter;
 import com.queuesystem.queue.OrdersQueue;
 import com.queuesystem.queue.Task;
+import com.queuesystem.resources.Resources;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,8 +28,8 @@ public class MessageParser {
 
     @PostMapping("/free-resources")
     public ResponseEntity<?> processFreeResourcesInfo(@RequestBody FreeResourcesInfo info) {
-        Resource freeResources = new Resource(info.getCpuCount(), info.getGpuCount(), info.getRamMegabytes()); // Przetwarzanie informacji o wolnych zasobach otrzymanych od superkomputera
-        Resource totalResources = DBAdapter.getTotalResources(); // Pobranie informacji o całkowitych zasobach z bazy danych
+        Resources freeResources = new Resources(info.getCpuCount(), info.getGpuCount(), info.getRamMegabytes()); // Przetwarzanie informacji o wolnych zasobach otrzymanych od superkomputera
+        Resources totalResources = DBAdapter.getTotalResources(); // Pobranie informacji o całkowitych zasobach z bazy danych
         SuperComputerResources superComputerResources = new SuperComputerResources(); // Tworzenie obiektu SuperComputerResources z wolnymi i całkowitymi zasobami
         superComputerResources.setFreeResources(freeResources);
         superComputerResources.setTotalResources(totalResources);

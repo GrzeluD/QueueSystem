@@ -3,8 +3,7 @@ package com.queuesystem.controller;
 import com.queuesystem.dbAdapter.DBAdapter;
 import com.queuesystem.request.Order;
 import com.queuesystem.request.Request;
-import com.queuesystem.request.RequestService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.queuesystem.resources.Resources;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +38,10 @@ public class FrontController {
     }
 
     @GetMapping("/service")
-    public String service() {
+    public String service(Model model) {
+        Resources updatedResources = dbAdapter.findResourceById();
+        model.addAttribute("updatedResources", updatedResources);
+
         return "service";
     }
 
