@@ -11,6 +11,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 @Service
 public class PendingReportsQueue {
     private final Queue<TaskReport> pendingReports = new ConcurrentLinkedQueue<>();
+    @Autowired
+    private DBAdapter dbAdapter;
 
     public PendingReportsQueue() {
 
@@ -24,7 +26,7 @@ public class PendingReportsQueue {
         Iterator<TaskReport> iterator = pendingReports.iterator();
         while (iterator.hasNext()) {
             TaskReport report = iterator.next();
-            if (DBAdapter.updateFinishedOrder(report)) {
+            if (dbAdapter.updateFinishedOrder(report)) {
                 iterator.remove(); // Usuń raport z kolejki, jeśli aktualizacja się powiodła
             } else {
                 break; // Przerwij procesowanie, jeśli aktualizacja nie powiodła się

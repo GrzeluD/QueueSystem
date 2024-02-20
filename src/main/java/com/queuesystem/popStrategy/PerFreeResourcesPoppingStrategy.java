@@ -7,10 +7,7 @@ import com.queuesystem.resources.Resources;
 import java.util.List;
 
 public class PerFreeResourcesPoppingStrategy implements PopStrategy {
-    public PerFreeResourcesPoppingStrategy()
-    {
-        System.out.println("PerFreeResourcesPoppingStrategy");
-    }
+    public PerFreeResourcesPoppingStrategy() {}
 
     public Task pop(List<Task> queue, Resources freeResources)
     {
@@ -22,8 +19,11 @@ public class PerFreeResourcesPoppingStrategy implements PopStrategy {
                 proposedTask = task;
             }
         }
+        if (proposedTask != null) {
+            System.out.println("PerFreeResourcesPoppingStrategy Popped task: " + proposedTask.getId());
+        } else {
+            System.out.println("PerFreeResourcesPoppingStrategy End of Task, didnt pop: ");
+        }
         return queue.remove(queue.indexOf(proposedTask));
     }
-
-
 }

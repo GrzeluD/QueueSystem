@@ -55,9 +55,7 @@ public class OrdersQueue
     }
 
     public void pop(SuperComputerResources resourcesInfo) {
-        System.out.println("Start pop");
         if (queue.isEmpty()) return;
-        System.out.println("Queue not empty");
         Task task;
         Resources freeResources = resourcesInfo.getFreeResources();
         System.out.println("Free respurces: CPU=" + freeResources.getCpuCount() + " GPU=" + freeResources.getCpuCount() + " RAM=" + freeResources.getRamMegabytes());
@@ -73,14 +71,17 @@ public class OrdersQueue
                 resourcesInfo.setFreeResources(freeResources);
             }
         } while (task != null);
+
+        System.out.println("No more tasks fitting free resources");
     }
 
 
     private PopStrategyFactory selectFactory(SuperComputerResources resourcesInfo) {
-        int cpuFreePercent = resourcesInfo.getFreeResources().getCpuCount() / resourcesInfo.getTotalResources().getCpuCount();
-        int gpuFreePercent = resourcesInfo.getFreeResources().getGpuCount() / resourcesInfo.getTotalResources().getGpuCount();
-        int ramFreePercent = resourcesInfo.getFreeResources().getRamMegabytes() / resourcesInfo.getTotalResources().getRamMegabytes();
-        int freePercentage = resourcesInfo.getFreeResources().getResourceWeight() / resourcesInfo.getTotalResources().getResourceWeight();
+        double cpuFreePercent = (double) (resourcesInfo.getFreeResources().getCpuCount()) / (double) (resourcesInfo.getTotalResources().getCpuCount());
+        double gpuFreePercent = (double) (resourcesInfo.getFreeResources().getGpuCount()) / (double) (resourcesInfo.getTotalResources().getGpuCount());
+        double ramFreePercent = (double) (resourcesInfo.getFreeResources().getRamMegabytes()) / (double) (resourcesInfo.getTotalResources().getRamMegabytes());
+        double freePercentage = (double) (resourcesInfo.getFreeResources().getResourceWeight()) / (double) (resourcesInfo.getTotalResources().getResourceWeight());
+        System.out.println("freePercentage: " + freePercentage + ", cpuFreePercent: " + cpuFreePercent + ", gpuFreePercent: " + gpuFreePercent + ", ramFreePercent: " + ramFreePercent);
         if (freePercentage < 0.1 ||
                 cpuFreePercent < 0.01 ||
                 gpuFreePercent < 0.01 ||
@@ -90,7 +91,7 @@ public class OrdersQueue
 
     @PostConstruct
     private void initTasks() {
-        List<Order> orders = dbAdapter.findAllOrders();
+        List<Order> orders = dbAdapter.findAllApprovedOrders();
         orders.forEach(this::addToQueue);
     }
 }

@@ -8,9 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PerPriorityPoppingStrategy implements PopStrategy {
-    public PerPriorityPoppingStrategy() {
-        System.out.println("PERPRIORITYPOPPING");
-    }
+    public PerPriorityPoppingStrategy() {}
     public Task pop(List<Task> queue, Resources freeResources) {
         List<Task> prioQueue;
         int priority = 1;
@@ -19,6 +17,7 @@ public class PerPriorityPoppingStrategy implements PopStrategy {
             if (prioQueue.isEmpty()) continue;
             for (Task task : prioQueue) {
                 if (DBAdapter.getRequiredResources(task).fitIn(freeResources)) {
+                    System.out.println("PerPriorityPoppingStrategy Popped task id:" + task.getId());
                     return queue.remove(queue.indexOf(task));
                 }
             }

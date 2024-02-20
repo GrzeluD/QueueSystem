@@ -27,11 +27,15 @@ public class DBAdapter {
         return new Resources(1000, 1000, 4194304);
     }
 
-    public static boolean updateFinishedOrder(TaskReport report) {
+    public boolean updateFinishedOrder(TaskReport report) {
+        Order order = (Order) this.findRequestById(report.getTaskId());
+
+        order.setRequestStatus("Completed");
+        requestRepository.save(order);
         //return false only if updating record in DB failed, then
         //report should land in waiting queue and system tries to re-write it
         //upon successful storing of next incoming report.
-        return false;
+        return true;
     }
 
     public static Resources getRequiredResources(Task task) {
@@ -58,6 +62,8 @@ public class DBAdapter {
     public List<Request> findOnlyRequests() { return findAllRequests().stream().filter(request -> !(request instanceof Order)).collect(Collectors.toList()); }
 
     public List<Order> findAllOrders() { return requestRepository.findAll().stream().filter(request -> request instanceof Order).map(request -> (Order) request).collect(Collectors.toList()); }
+
+    public List<Order> findAllApprovedOrders() {return requestRepository.findAll().stream().filter(request -> request instanceof Order && "Approved".equals(((Order) request).getRequestStatus())).map(request -> (Order) request).collect(Collectors.toList());}
 
     public List<Request> findAllRequests() {
         return requestRepository.findAll();

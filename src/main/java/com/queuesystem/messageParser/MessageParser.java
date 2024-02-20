@@ -31,6 +31,8 @@ public class MessageParser {
     private int supercomputerPort;
     private final PendingReportsQueue pendingReportsQueue;
     private Beholder beholder;
+    @Autowired
+    private DBAdapter dbAdapter;
 
     public MessageParser() {
         this.pendingReportsQueue = new PendingReportsQueue();
@@ -47,9 +49,6 @@ public class MessageParser {
         SuperComputerResources superComputerResources = new SuperComputerResources(); // Tworzenie obiektu SuperComputerResources z wolnymi i całkowitymi zasobami
         superComputerResources.setFreeResources(freeResources);
         superComputerResources.setTotalResources(totalResources);
-        System.out.println("SUPERKOMPEX RESOURCES: (" + superComputerResources.getFreeResources().getCpuCount() + ", " + superComputerResources.getFreeResources().getGpuCount() + ", " +
-                superComputerResources.getFreeResources().getRamMegabytes() + ") of (" + superComputerResources.getTotalResources().getCpuCount() + ", " +
-                superComputerResources.getTotalResources().getGpuCount() + ", " + superComputerResources.getTotalResources().getRamMegabytes() + ")");
         beholder.popSuperComputerResources(superComputerResources); // Użycie informacji o zasobach do aktualizacji kolejki zadań
         return ResponseEntity.ok().body("Zaktualizowano informacje o wolnych zasobach i zaktualizowano kolejność zadań.");
     }
@@ -57,10 +56,12 @@ public class MessageParser {
 
     @PostMapping("/task-report")
     public ResponseEntity<?> processTaskReport(@RequestBody TaskReport report) {
-        if (!DBAdapter.updateFinishedOrder(report)) {
+        System.out.println("Supercomputer says task completed:" + report.getTaskId());
+
+        if (!dbAdapter.updateFinishedOrder(report)) {
             // Jeśli zapis do bazy się nie udał, dodaj raport do kolejki oczekujących
             pendingReportsQueue.addReport(report);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Nie udało się zapisać raportu, został dodany do kolejki oczekujących.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Coudl not send report. Report has been added to queue.");
         } else {
             // Jeśli się udało, spróbuj przetworzyć również raporty oczekujące
             pendingReportsQueue.processPendingReports();
@@ -71,9 +72,9 @@ public class MessageParser {
 
     @Async
     public void requestTaskExecution(Task task) {
-
+        System.out.println("Asynchronously sent to supercomputer: task id " + task.getId());
     }
     public void requestFreeResourcesReport() {
-
+        System.out.println("Supercomputer requested for free resources report.");
     }
 }
