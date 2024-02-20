@@ -9,7 +9,7 @@ import java.util.List;
 public class PerFreeResourcesPoppingStrategy implements PopStrategy {
     public PerFreeResourcesPoppingStrategy()
     {
-
+        System.out.println("PerFreeResourcesPoppingStrategy");
     }
 
     public Task pop(List<Task> queue, Resources freeResources)

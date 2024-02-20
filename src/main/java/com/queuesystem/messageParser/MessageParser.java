@@ -3,9 +3,16 @@ package com.queuesystem.messageParser;
 import com.queuesystem.dbAdapter.DBAdapter;
 import com.queuesystem.queue.OrdersQueue;
 import com.queuesystem.queue.Task;
+import com.queuesystem.request.Order;
 import com.queuesystem.resources.Resources;
+import jakarta.annotation.PostConstruct;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,15 +22,22 @@ import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/messages")
+@Service
+@Component
+@Getter
+@Setter
 public class MessageParser {
     private String supercomputerAddress;
     private int supercomputerPort;
     private final PendingReportsQueue pendingReportsQueue;
-    private final OrdersQueue ordersQueue;
+    private Beholder beholder;
 
     public MessageParser() {
-        this.ordersQueue = new OrdersQueue(this);
         this.pendingReportsQueue = new PendingReportsQueue();
+    }
+
+    public void setMediator(Beholder beholder) {
+        this.beholder = beholder;
     }
 
     @PostMapping("/free-resources")
@@ -33,9 +47,13 @@ public class MessageParser {
         SuperComputerResources superComputerResources = new SuperComputerResources(); // Tworzenie obiektu SuperComputerResources z wolnymi i całkowitymi zasobami
         superComputerResources.setFreeResources(freeResources);
         superComputerResources.setTotalResources(totalResources);
-        ordersQueue.pop(superComputerResources); // Użycie informacji o zasobach do aktualizacji kolejki zadań
+        System.out.println("SUPERKOMPEX RESOURCES: (" + superComputerResources.getFreeResources().getCpuCount() + ", " + superComputerResources.getFreeResources().getGpuCount() + ", " +
+                superComputerResources.getFreeResources().getRamMegabytes() + ") of (" + superComputerResources.getTotalResources().getCpuCount() + ", " +
+                superComputerResources.getTotalResources().getGpuCount() + ", " + superComputerResources.getTotalResources().getRamMegabytes() + ")");
+        beholder.popSuperComputerResources(superComputerResources); // Użycie informacji o zasobach do aktualizacji kolejki zadań
         return ResponseEntity.ok().body("Zaktualizowano informacje o wolnych zasobach i zaktualizowano kolejność zadań.");
     }
+
 
     @PostMapping("/task-report")
     public ResponseEntity<?> processTaskReport(@RequestBody TaskReport report) {

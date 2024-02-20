@@ -9,7 +9,7 @@ import java.util.List;
 
 public class PerPriorityPoppingStrategy implements PopStrategy {
     public PerPriorityPoppingStrategy() {
-
+        System.out.println("PERPRIORITYPOPPING");
     }
     public Task pop(List<Task> queue, Resources freeResources) {
         List<Task> prioQueue;

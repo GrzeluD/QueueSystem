@@ -9,12 +9,14 @@ import com.queuesystem.request.RequestRepository;
 import com.queuesystem.resources.Resources;
 import com.queuesystem.resources.ResourcesRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Component
 @AllArgsConstructor
 public class DBAdapter {
     private final RequestRepository requestRepository;
