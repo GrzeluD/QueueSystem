@@ -1,10 +1,15 @@
 package com.queuesystem.messageParser;
 
-public class FreeResourcesReportMsg implements Message {
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class FreeResourcesInfo {
     private int cpuCount;
     private int gpuCount;
     private int ramMegabytes;
-    public FreeResourcesReportMsg() {
+    public FreeResourcesInfo() {
 
     }
 }

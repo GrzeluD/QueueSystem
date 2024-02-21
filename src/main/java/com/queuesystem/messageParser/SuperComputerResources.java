@@ -1,16 +1,12 @@
 package com.queuesystem.messageParser;
 
+import com.queuesystem.resources.Resources;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class SuperComputerResources {
-    private Resource freeResources;
-    private Resource totalResources;
-    //TODO: implement constructor so it gets total resources from DB
-    public SuperComputerResources(Resource freeResources) {
-        this.freeResources = freeResources;
-    }
-    public Resource getFreeResources() {
-        return freeResources;
-    }
-    public Resource getTotalResources() {
-        return totalResources;
-    }
+    private Resources freeResources;
+    private Resources totalResources;
 }

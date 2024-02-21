@@ -9,13 +9,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ServiceMan  extends User {
-    public ServiceMan(String name, String username, String email, String password) {
+public class ServiceManEntity extends User {
+    public ServiceManEntity(String name, String username, String email, String password) {
         super(name, username, email, password);
         setUserRole(UserRole.SERVICEMAN);
-    }
-
-    public void updateConfig() {
-
     }
 }

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Service</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <header class="mt-5">
+        <h1>Panel Serwisanta</h1>
+    </header>
+    <main>
+        <p>Witaj w panelu Serwisanta!</p>
+        <p>Dostępne zasoby: CPU: <span th:text="${updatedResources.cpuCount}"></span>, GPU: <span th:text="${updatedResources.gpuCount}"></span>, RAM: <span th:text="${updatedResources.ramMegabytes}"></span></p>
+
+        <form th:action="@{/api/resources/update}" th:object="${resourcesToAdd}" method="post">
+            <div class="form-group">
+                <label>CPU:</label>
+                <input name="cpuCount" type="text" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>GPU:</label>
+                <input type="number" class="form-control" name="gpuCount" />
+            </div>
+            <div class="form-group">
+                <label>RAM:</label>
+                <input type="number" class="form-control" name="ramMegabytes" />
+            </div>
+            <button type="submit" class="btn btn-primary">Dodaj do zasobów</button>
+        </form>
+        <form action="/logout" method="post">
+            <button type="submit" class="btn btn-secondary">Wyloguj</button>
+        </form>
+    </main>
+</div>
+</body>
+</html>

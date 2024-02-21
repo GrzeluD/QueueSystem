@@ -9,6 +9,10 @@ public class Task {
         this.id = id;
         this.priority = priority;
     }
+    public Task(Order order) {
+        this.id = order.getRequestId();
+        this.priority = order.getPriority();
+    }
     public void changePriority(int priority) {
         this.priority = priority;
     }
@@ -21,7 +25,7 @@ public class Task {
 
     /**
      * this method gets complete order info from database based on TaskID
-     * @return
+     * @return Order matching ID in task
      */
     public Order getOrderFromDB(/*DBConnection dbConnection OR DBAdapter bdAdapter*/) {
         return null;
